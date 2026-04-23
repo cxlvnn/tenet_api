@@ -12,6 +12,8 @@ class Product extends Model
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

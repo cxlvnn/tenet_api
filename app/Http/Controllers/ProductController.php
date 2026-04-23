@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use App\Models\Company;
 
 class ProductController extends Controller
 {
@@ -14,15 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductResource::collection(Product::all());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return ProductResource::collection(Product::paginate(5));
     }
 
     /**
@@ -30,7 +23,8 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        $product = Product::create($request->validated());
+        return new ProductResource($product);
     }
 
     /**
@@ -38,15 +32,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
+        return new ProductResource($product);
     }
 
     /**
@@ -54,7 +40,8 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->validated());
+        return new ProductResource($product);
     }
 
     /**
@@ -62,6 +49,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return response()->noContent();
     }
 }
