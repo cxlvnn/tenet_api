@@ -12,6 +12,10 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('guest')->group(function () {
     Route::post('/register', [SessionController::class, 'register'])->name('register');
+    Route::get('/login', function () {
+        return 'This is a login page';
+    });
+    Route::post('/login', [SessionController::class, 'login'])->name('login');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -24,4 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 });
 
-Route::post('/companies', [CompanyController::class, 'store'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::singleton('company', CompanyController::class)->creatable();
+});
