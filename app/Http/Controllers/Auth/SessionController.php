@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
@@ -17,5 +20,28 @@ class SessionController extends Controller
             'email' => $user->email,
             'token' => $token,
         ];
+    }
+
+    public function login(LoginUserRequest $request)
+    {
+        if (Auth::attempt($request->validated())) {
+            $token = Auth::user()->createToken('api-token')->plainTextToken;
+
+            return response()->json([
+                'message' => 'Login successful!',
+                'token' => $token,
+            ], 200);
+        }
+
+        return response()->json(['message' => 'Wrong credentials'], 401);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully!',
+        ], 200);
     }
 }

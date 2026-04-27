@@ -13,10 +13,9 @@ class ProductController extends Controller
 {
     public function index()
     {
-        /* $products = Auth::user()->company->products()->paginate(5); */
-        /**/
-        /* return ProductResource::collection($products); */
-        return ProductResource::collection(Product::all());
+        $products = Auth::user()->company->products()->paginate(5);
+
+        return ProductResource::collection($products);
     }
 
     public function store(StoreProductRequest $request)

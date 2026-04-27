@@ -12,9 +12,6 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('guest')->group(function () {
     Route::post('/register', [SessionController::class, 'register'])->name('register');
-    Route::get('/login', function () {
-        return 'This is a login page';
-    });
     Route::post('/login', [SessionController::class, 'login'])->name('login');
 });
 
@@ -26,8 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/products', [ProductController::class, 'store']);
     Route::patch('/products/{product}', [ProductController::class, 'update']);
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-});
 
-Route::middleware('auth:sanctum')->group(function () {
     Route::singleton('company', CompanyController::class)->creatable();
+
+    Route::post('/logout', [SessionController::class, 'logout'])->name('logout');
 });
