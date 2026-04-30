@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginUserRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
-use App\Http\Resources\CompanyResource;
+use App\Http\Resources\UserCompanyResource;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,11 +22,11 @@ class SessionController extends Controller
         $company->save();
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return [
+        return response()->json([
             'email' => $user->email,
-            'company' => new CompanyResource($company),
+            'company' => new UserCompanyResource($company),
             'token' => $token,
-        ];
+        ], 201);
     }
 
     public function login(LoginUserRequest $request)

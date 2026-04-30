@@ -19,7 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/products/{product}', [ProductController::class, 'update']);
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
-    Route::singleton('company', CompanyController::class)->creatable();
+    Route::get('/company', [CompanyController::class, 'show']);
+    Route::post('/company', [CompanyController::class, 'update']);
+    Route::delete('/company', [CompanyController::class, 'destroy']);
 
     Route::post('/logout', [SessionController::class, 'logout'])->name('logout');
 });
