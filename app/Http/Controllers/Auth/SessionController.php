@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginUserRequest;
-use App\Http\Requests\RegisterUserRequest;
+use App\Http\Requests\Auth\LoginUserRequest;
+use App\Http\Requests\Auth\RegisterUserRequest;
+use App\Http\Resources\CompanyResource;
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,11 +15,16 @@ class SessionController extends Controller
 {
     public function register(RegisterUserRequest $request)
     {
-        $user = User::create($request->validated());
+        $user = User::create($request->safe()->only('name', 'email', 'password'));
+        $company = new Company();
+        $company->name = $request->companyName;
+        $company->user_id = $user->id;
+        $company->save();
         $token = $user->createToken('api-token')->plainTextToken;
 
         return [
             'email' => $user->email,
+            'company' => new CompanyResource($company),
             'token' => $token,
         ];
     }

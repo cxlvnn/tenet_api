@@ -13,6 +13,9 @@ class ProductController extends Controller
 {
     public function index()
     {
+        if (request()->user()->company === null) {
+            return response()->json(['message' => 'No products to be listed'], 404);
+        }
         $products = Auth::user()->company->products()->paginate(5);
 
         return ProductResource::collection($products);

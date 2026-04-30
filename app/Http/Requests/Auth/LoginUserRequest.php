@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterUserRequest extends FormRequest
+class LoginUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,15 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'required', 'max:255'],
-            'email' => ['email', 'required', 'unique:users', 'max:255'],
-            'password' => ['required', 'min:8', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'password' => ['required', 'max:255'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'password.max' => 'The number of characters for a password should not exceed 255',
         ];
     }
 }
